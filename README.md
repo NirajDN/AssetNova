@@ -1,59 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/images/assetnova-logo.png" width="80" alt="AssetNova Logo">
 </p>
 
-## About Laravel
+<h1 align="center">AssetNova</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <strong>Industrial inventory, reimagined.</strong><br>
+  Deliver real-time spare parts tracking, procurement intelligence, and seamless multi-company control in one unified platform.
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-12.x-red.svg" alt="Laravel 12.x">
+  <img src="https://img.shields.io/badge/PHP-8.2%2B-blue.svg" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/MySQL-8.0-orange.svg" alt="MySQL 8.0">
+  <img src="https://img.shields.io/badge/Status-Production--Ready-brightgreen.svg" alt="Status">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Key Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 🏢 Multi-Tenant SaaS Architecture
+*   **Data Isolation**: Every company (e.g., Optimum, Caterpillar) operates in a completely isolated environment.
+*   **Scoped Dashboards**: Real-time analytics and inventory trajectory tailored to each tenant.
+*   **Tenant Branding**: Specific logos and company details reflected in the UI and reports.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### ⚙️ Comprehensive Inventory Management
+*   **Parts Directory**: High-fidelity tracking of machine spares with product imagery support.
+*   **Transactions Ledger**: Real-time logging of stock ingress (In) and egress (Out) with validation.
+*   **Smart Thresholds**: Low-stock alerts and critical asset monitoring.
 
-## Laravel Sponsors
+### 🏗️ Premium Industrial UI/UX
+*   **Digital Foreman Design**: A minimalistic, high-performance light theme built with Blade and TailwindCSS.
+*   **Mobile Ready**: Fully responsive navigation with slide-in drawers and a quick-access mobile bottom bar.
+*   **Dynamic UX**: Real-time search, interactive charts (Chart.js), and glassmorphism elements.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🛠️ Technology Stack
+- **Framework**: Laravel 12.x
+- **Database**: MySQL 8.0
+- **View Engine**: Blade Templates
+- **Styling**: TailwindCSS & Vanilla CSS
+- **Interactivity**: Alpine.js / Vanilla JS
+- **Charts**: Chart.js 4.4
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 💻 Getting Started
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Prerequisites
+- PHP 8.2 or higher
+- MySQL 8.0
+- Composer
 
-## Code of Conduct
+### Installation
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/NirajDN/AssetNova.git
+   cd AssetNova
+   ```
 
-## Security Vulnerabilities
+2. **Install dependencies**
+   ```bash
+   composer install
+   npm install && npm run build
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. **Configure Environment**
+   ```bash
+   cp .env.example .env
+   # Update DB_DATABASE, DB_USERNAME, DB_PASSWORD in .env
+   php artisan key:generate
+   ```
 
-## License
+4. **Prepare Database**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5. **Start the server**
+   ```bash
+   php artisan serve
+   ```
+
+---
+
+## 🔒 Security & Validation
+*   **Company Scoping**: Every query is strictly filtered by `company_id` using Eloquent global constraints where necessary or manual scoping in controllers.
+*   **Audit-Ready**: Every stock movement is logged with a link to the responsible personnel.
+*   **Input Guard**: Hardened validation for SKUs, quantities, and file uploads.
+
+---
+
+## 📝 License
+AssetNova is open-sourced software licensed under the [MIT license](LICENSE).
+
+<p align="center">
+  Building the future of machine operations, one part at a time.
+</p>
