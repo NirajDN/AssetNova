@@ -163,31 +163,44 @@
 
         <!-- Nav links -->
         <nav class="flex-1 space-y-0.5 overflow-y-auto">
-            <a class="flex items-center gap-3 {{ request()->routeIs('dashboard') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
-               href="{{ route('dashboard') }}" onclick="closeSidebar()">
-                <span class="material-symbols-outlined">dashboard</span>
-                <span class="font-['Manrope'] tracking-tight text-sm">Dashboard</span>
-            </a>
-            <a class="flex items-center gap-3 {{ request()->routeIs('parts.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
-               href="{{ route('parts.index') }}" onclick="closeSidebar()">
-                <span class="material-symbols-outlined">inventory_2</span>
-                <span class="font-['Manrope'] tracking-tight text-sm">Parts Directory</span>
-            </a>
-            <a class="flex items-center gap-3 {{ request()->routeIs('transactions.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
-               href="{{ route('transactions.index') }}" onclick="closeSidebar()">
-                <span class="material-symbols-outlined">swap_horiz</span>
-                <span class="font-['Manrope'] tracking-tight text-sm">Transactions</span>
-            </a>
-            <a class="flex items-center gap-3 {{ request()->routeIs('suppliers.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
-               href="{{ route('suppliers.index') }}" onclick="closeSidebar()">
-                <span class="material-symbols-outlined">conveyor_belt</span>
-                <span class="font-['Manrope'] tracking-tight text-sm">Suppliers</span>
-            </a>
-            <a class="flex items-center gap-3 {{ request()->routeIs('categories.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
-               href="{{ route('categories.index') }}" onclick="closeSidebar()">
-                <span class="material-symbols-outlined">category</span>
-                <span class="font-['Manrope'] tracking-tight text-sm">Categories</span>
-            </a>
+            @if(auth()->user()->isSuperAdmin())
+                <a class="flex items-center gap-3 {{ request()->routeIs('super-admin.dashboard') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('super-admin.dashboard') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">Control Tower</span>
+                </a>
+                <a class="flex items-center gap-3 {{ request()->routeIs('super-admin.companies.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('super-admin.companies.create') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">add_business</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">Enterprise Factory</span>
+                </a>
+            @else
+                <a class="flex items-center gap-3 {{ request()->routeIs('dashboard') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('dashboard') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 {{ request()->routeIs('parts.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('parts.index') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">Parts Directory</span>
+                </a>
+                <a class="flex items-center gap-3 {{ request()->routeIs('transactions.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('transactions.index') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">swap_horiz</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">Transactions</span>
+                </a>
+                <a class="flex items-center gap-3 {{ request()->routeIs('suppliers.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('suppliers.index') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">conveyor_belt</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">Suppliers</span>
+                </a>
+                <a class="flex items-center gap-3 {{ request()->routeIs('categories.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('categories.index') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined">category</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">Categories</span>
+                </a>
+            @endif
         </nav>
 
         <!-- Bottom: Settings + Logout -->

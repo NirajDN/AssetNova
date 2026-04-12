@@ -14,16 +14,6 @@ Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
 
-// DIAGNOSTIC CORE: Bypass form to test sessions
-Route::get('/secret-login', function() {
-    $user = \App\Models\User::where('email', 'admin@caterpillar.in')->first();
-    if ($user) {
-        \Illuminate\Support\Facades\Auth::login($user);
-        return redirect()->route('dashboard');
-    }
-    return "User not found in DB";
-});
-
 // ── Protected (requires login) ─────────────────────────────────
 Route::middleware('auth.company')->group(function () {
     Route::get('/',           [DashboardController::class,  'index'])->name('dashboard');
@@ -34,4 +24,11 @@ Route::middleware('auth.company')->group(function () {
     Route::get('/settings',         [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings',        [SettingsController::class, 'update'])->name('settings.update');
     Route::get('/export/manifest',  [SettingsController::class, 'exportManifest'])->name('export.manifest');
+});
+
+// ── Super Admin (Portal Control) ────────────────────────────────
+Route::middleware(['auth'])->prefix('control-tower')->name('super-admin.')->group(function () {
+    Route::get('/dashboard',       [\App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/companies/create', [\App\Http\Controllers\SuperAdminController::class, 'createCompany'])->name('companies.create');
+    Route::post('/companies',       [\App\Http\Controllers\SuperAdminController::class, 'storeCompany'])->name('companies.store');
 });

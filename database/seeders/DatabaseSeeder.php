@@ -16,6 +16,24 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // ═══════════════════════════════════════════════════════
+        // SYSTEM: AssetNova Master Control
+        // ═══════════════════════════════════════════════════════
+        $saas = Company::create([
+            'name'     => 'AssetNova Master Control',
+            'slug'     => 'assetnova',
+            'industry' => 'Platform Administration',
+            'logo_url' => '/images/assetnova-logo.png',
+        ]);
+
+        User::create([
+            'company_id' => $saas->id,
+            'name'       => 'Super Admin',
+            'email'      => 'admin@assetnova.com',
+            'password'   => Hash::make('password123'),
+            'role'       => 'super_admin',
+        ]);
+
+        // ═══════════════════════════════════════════════════════
         // COMPANY 1: Optimum Inventory Control
         // ═══════════════════════════════════════════════════════
         $optimum = Company::create([
@@ -30,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'name'       => 'Chief Ops',
             'email'      => 'admin@optimum.in',
             'password'   => Hash::make('password123'),
-            'role'       => 'admin',
+            'role'       => 'company_admin',
         ]);
 
         // Categories
@@ -71,7 +89,7 @@ class DatabaseSeeder extends Seeder
             'name'       => 'Fleet Manager',
             'email'      => 'admin@caterpillar.in',
             'password'   => Hash::make('password123'),
-            'role'       => 'admin',
+            'role'       => 'company_admin',
         ]);
 
         // Categories for Cat
