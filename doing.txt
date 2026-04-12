@@ -1,0 +1,23 @@
+HELLO! Here is your requested To-Do List.
+
+Please complete the following setups so I can build the system properly:
+
+1. DATABASE CONFIGURATION
+   - Please create a local database (e.g., MySQL, called `optimum_inventory`).
+   - Open `/Users/nirajnillawar/Downloads/Optimum/project/.env` 
+   - Update the following lines with your local database credentials:
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=optimum_inventory
+     DB_USERNAME=root
+     DB_PASSWORD=your_password
+   - Alternatively, you can use SQLite. In that case, keep DB_CONNECTION=sqlite and ensure `database/database.sqlite` exists (it seems to have been created during setup). Let me know your preference!
+
+2. NPM DEPENDENCIES
+   - Please run `npm install` in your terminal inside the `project` directory. This is needed if we are going to use Vite for compiling assets down the line.
+   
+3. REVIEW IMPLEMENTATION PLAN
+   - I have created an Implementation Plan (check the artifacts window). Please review and approve it so I can start coding the migrations, models, controllers, and Stitch UI integrations immediately!
+
+Whenever you are ready, just reply here!

@@ -1,0 +1,40 @@
+Optimum Inventory Control of Machine Spares and Co
+==================================================
+
+CORE FUNCTIONALITIES:
+---------------------
+1. Dashboard Overview
+   - View high-level metrics (Total Parts, Out of Stock, Low Stock Alerts, Total Asset Value).
+   - Recent activity feed and quick action shortcuts.
+
+2. Parts Directory (Inventory Management)
+   - Add, Edit, View, and Delete machine spares and components.
+   - Track part number, name, category, warehouse location, cost, and quantities (current stock, min required threshold).
+   
+3. Stock Transactions (In / Out)
+   - Record inward stock (new purchases, returns).
+   - Record outward stock (parts used, dispatched for maintenance).
+   - Maintain a comprehensive history/log for auditing.
+
+4. Global Suppliers
+   - Manage supplier profiles (Name, Contact, Address, Rating).
+   - Link parts to specific suppliers for easy reordering.
+
+5. Maintenance Schedule
+   - Track upcoming machine maintenance.
+   - Detail which spare parts are projected to be needed.
+   
+6. Warehouse Mapping
+   - Organize and visualize where parts are stored physically (Aisles, Racks, Bins).
+
+7. Analytics Vault
+   - Detailed reporting, historical data charting, and optimization insights (like EOQ - Economic Order Quantity).
+
+8. System Settings & Authentication
+   - Login, registration, role-based access control (Admin vs. Operator).
+
+TECHNICAL STACK & ARCHITECTURE:
+-------------------------------
+- Backend: PHP Laravel MVC framework
+- Frontend: Blade Templates + UI extracted from Stitch (HTML/CSS)
+- DB: MySQL or SQLite
