@@ -11,7 +11,7 @@ return new class extends Migration
         // Add company_id to users
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete()->after('id');
-            $table->string('role')->default('admin')->after('company_id'); // admin | staff
+            $table->string('role')->default('company_admin')->after('company_id');
         });
 
         // Add company_id to all inventory tables
