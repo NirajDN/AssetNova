@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             'company_id' => $saas->id,
             'name'       => 'Super Admin',
             'email'      => 'admin@assetnova.com',
-            'password'   => Hash::make('password123'),
+            'password'   => Hash::make('Divya@8421'),
             'role'       => 'super_admin',
         ]);
 
