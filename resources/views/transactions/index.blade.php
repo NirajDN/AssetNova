@@ -69,12 +69,12 @@
     <div class="col-span-12 lg:col-span-3 grid grid-cols-2 gap-4">
         <div class="bg-secondary-container/30 p-4 rounded-xl flex flex-col justify-center">
             <span class="text-[10px] font-bold text-on-secondary-container uppercase">Total In</span>
-            <span class="text-2xl font-extrabold text-primary">{{ number_format($totalIn) }}</span>
+            <span class="text-2xl font-extrabold text-primary">@indianNumber($totalIn)</span>
             <span class="text-[10px] text-on-surface-variant">units received</span>
         </div>
         <div class="bg-error-container/20 p-4 rounded-xl flex flex-col justify-center">
             <span class="text-[10px] font-bold text-on-error-container uppercase">Total Out</span>
-            <span class="text-2xl font-extrabold text-error">{{ number_format($totalOut) }}</span>
+            <span class="text-2xl font-extrabold text-error">@indianNumber($totalOut)</span>
             <span class="text-[10px] text-on-surface-variant">units dispatched</span>
         </div>
     </div>
@@ -124,9 +124,9 @@
                 </td>
                 <td class="px-6 py-5">
                     @if($transaction->type === 'in')
-                    <div class="text-sm font-black text-primary">+{{ number_format($transaction->quantity) }} <span class="text-[10px] font-normal text-on-surface-variant">Units</span></div>
+                    <div class="text-sm font-black text-primary">+@indianNumber($transaction->quantity) <span class="text-[10px] font-normal text-on-surface-variant">Units</span></div>
                     @else
-                    <div class="text-sm font-black text-error">-{{ number_format($transaction->quantity) }} <span class="text-[10px] font-normal text-on-surface-variant">Units</span></div>
+                    <div class="text-sm font-black text-error">-@indianNumber($transaction->quantity) <span class="text-[10px] font-normal text-on-surface-variant">Units</span></div>
                     @endif
                 </td>
                 <td class="px-6 py-5 text-xs text-on-surface-variant max-w-[200px] truncate">

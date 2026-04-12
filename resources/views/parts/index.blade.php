@@ -36,12 +36,12 @@
             <span class="material-symbols-outlined text-[8rem]">account_balance</span>
         </div>
         <p class="text-[10px] font-black uppercase tracking-widest text-primary-fixed-dim mb-1">Total Inventory Value</p>
-        <p class="text-4xl font-black tracking-tight">₹{{ number_format($totalValue, 0) }}</p>
+        <p class="text-4xl font-black tracking-tight">@inr($totalValue)</p>
         <p class="text-xs text-primary-fixed-dim mt-2">Across {{ $totalParts }} parts in stock</p>
         <div class="mt-4 pt-4 border-t border-white/20 flex items-center gap-2">
             <span class="material-symbols-outlined text-sm text-primary-fixed-dim">trending_up</span>
             <p class="text-xs text-primary-fixed-dim">
-                Projected 12-month value: <span class="font-black text-white">₹{{ number_format($projectedValue, 0) }}</span>
+                Projected 12-month value: <span class="font-black text-white">@inr($projectedValue)</span>
                 <span class="ml-1 text-[10px] bg-white/20 px-1.5 py-0.5 rounded font-bold">+9.5%</span>
             </p>
         </div>
@@ -57,10 +57,10 @@
         <p class="font-bold text-primary text-sm leading-tight">{{ $highestValuePart->name }}</p>
         <p class="text-[10px] text-on-surface-variant font-mono mt-0.5">{{ $highestValuePart->sku }}</p>
         <p class="text-xl font-black text-on-surface mt-2">
-            ₹{{ number_format($highestValuePart->stock_quantity * $highestValuePart->cost, 0) }}
+            @inr($highestValuePart->stock_quantity * $highestValuePart->cost)
         </p>
         <p class="text-[10px] text-on-surface-variant mt-1">
-            {{ number_format($highestValuePart->stock_quantity) }} units × ₹{{ number_format($highestValuePart->cost, 0) }}
+            @indianNumber($highestValuePart->stock_quantity) units × @inr($highestValuePart->cost)
         </p>
         @endif
     </div>
@@ -74,7 +74,7 @@
             <span class="p-2 bg-error-container rounded-lg material-symbols-outlined text-error text-sm">shield_locked</span>
             <p class="text-[10px] font-black uppercase tracking-widest text-error">Capital at Risk</p>
         </div>
-        <p class="text-xl font-black text-error">₹{{ number_format($valueAtRisk, 0) }}</p>
+        <p class="text-xl font-black text-error">@inr($valueAtRisk)</p>
         <p class="text-[10px] text-on-surface-variant mt-1 leading-relaxed">
             Tied up in {{ $criticalLow }} critical-stock {{ Str::plural('part', $criticalLow) }}. Reorder recommended.
         </p>
@@ -177,7 +177,7 @@
                     <td class="px-6 py-5">
                         @php $pct = $part->min_threshold > 0 ? min(100, ($part->stock_quantity / ($part->min_threshold * 3)) * 100) : 100; @endphp
                         <div class="space-y-1 min-w-[120px]">
-                            <p class="text-xs font-bold {{ $isLow ? 'text-error' : 'text-on-surface' }}">{{ number_format($part->stock_quantity) }} units</p>
+                            <p class="text-xs font-bold {{ $isLow ? 'text-error' : 'text-on-surface' }}">@indianNumber($part->stock_quantity) units</p>
                             <div class="w-full h-1.5 bg-surface-container rounded-full">
                                 <div class="h-full {{ $isLow ? 'bg-error' : 'bg-primary' }} rounded-full" style="width: {{ $pct }}%"></div>
                             </div>
@@ -185,15 +185,15 @@
                         </div>
                     </td>
                     <td class="px-6 py-5 font-mono font-bold text-on-surface text-sm">
-                        ₹{{ number_format($part->cost, 2) }}
+                        @inr($part->cost)
                     </td>
                     <td class="px-6 py-5 text-xs text-on-surface-variant">{{ $part->location ?? '—' }}</td>
                     <!-- Total Value = stock × unit cost -->
                     <td class="px-6 py-5">
                         @php $totalVal = $part->stock_quantity * $part->cost; @endphp
                         <div class="min-w-[110px]">
-                            <p class="font-black text-sm {{ $part->stock_quantity <= $part->min_threshold ? 'text-error' : 'text-primary' }}">₹{{ number_format($totalVal, 0) }}</p>
-                            <p class="text-[10px] text-slate-400 mt-0.5">{{ number_format($part->stock_quantity) }} × ₹{{ number_format($part->cost, 0) }}</p>
+                            <p class="font-black text-sm {{ $part->stock_quantity <= $part->min_threshold ? 'text-error' : 'text-primary' }}">@inr($totalVal)</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">@indianNumber($part->stock_quantity) × @inr($part->cost)</p>
                         </div>
                     </td>
                     <td class="px-4 py-5 w-px whitespace-nowrap">

@@ -29,7 +29,7 @@
                 </div>
             </div>
             <p class="text-label-md font-bold text-on-surface-variant uppercase tracking-widest text-[10px]">Total Active Stock</p>
-            <h3 class="text-4xl font-extrabold text-primary tracking-tighter mt-1">{{ number_format($totalStock ?? 14208) }}</h3>
+            <h3 class="text-4xl font-extrabold text-primary tracking-tighter mt-1">@indianNumber($totalStock ?? 14208)</h3>
             <p class="text-xs text-on-surface-variant mt-2 italic">Units across all sectors</p>
         </div>
 
@@ -103,20 +103,18 @@
             <div class="mt-6 pt-5 border-t border-outline-variant/10 grid grid-cols-3 gap-4">
                 <div class="text-center">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Total In (period)</p>
-                    <p class="text-xl font-black text-primary">{{ number_format($chartIn->sum()) }}</p>
+                    <p class="text-xl font-black text-primary">@indianNumber($chartIn->sum())</p>
                     <p class="text-[10px] text-on-surface-variant">units received</p>
                 </div>
                 <div class="text-center border-x border-outline-variant/10">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Total Out (period)</p>
-                    <p class="text-xl font-black text-error">{{ number_format($chartOut->sum()) }}</p>
+                    <p class="text-xl font-black text-error">@indianNumber($chartOut->sum())</p>
                     <p class="text-[10px] text-on-surface-variant">units dispatched</p>
                 </div>
                 <div class="text-center">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Net Movement</p>
                     @php $net = $chartIn->sum() - $chartOut->sum(); @endphp
-                    <p class="text-xl font-black {{ $net >= 0 ? 'text-primary' : 'text-error' }}">
-                        {{ $net >= 0 ? '+' : '' }}{{ number_format($net) }}
-                    </p>
+                        {{ $net >= 0 ? '+' : '' }}@indianNumber($net)
                     <p class="text-[10px] text-on-surface-variant">net units</p>
                 </div>
             </div>
@@ -298,13 +296,13 @@
                         <div>
                             <p class="text-[10px] font-bold text-on-surface-variant uppercase">Stock</p>
                             <p class="text-lg font-black {{ $isLow ? 'text-error' : 'text-primary' }}">
-                                {{ number_format($part->stock_quantity) }}
+                                @indianNumber($part->stock_quantity)
                                 <span class="text-[10px] font-normal text-on-surface-variant">units</span>
                             </p>
                         </div>
                         <div class="text-right">
                             <p class="text-[10px] font-bold text-on-surface-variant uppercase">Total Value</p>
-                            <p class="text-lg font-black text-primary">₹{{ number_format($totalVal, 0) }}</p>
+                            <p class="text-lg font-black text-primary">@inr($totalVal)</p>
                         </div>
                     </div>
                 </div>
