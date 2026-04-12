@@ -6,6 +6,8 @@
     <title>AssetNova | Digital Foreman</title>
     <link rel="icon" type="image/png" href="/images/assetnova-logo.png"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -83,7 +85,15 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             vertical-align: middle;
         }
-        body { font-family: 'Inter', sans-serif; }
+        /* Prevent Flash of Unstyled Text (FOUT) */
+        html { font-size: 14px; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            opacity: 0; 
+            transition: opacity 0.3s ease-in; 
+            background-color: #f9f9fe;
+        }
+        body.loaded { opacity: 1; }
         h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
         .glass-header {
             background: rgba(249, 249, 254, 0.9);
@@ -274,6 +284,13 @@
     @stack('scripts')
 
     <script>
+        // Trigger page fade-in
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+        // Backup for fast connections
+        setTimeout(() => document.body.classList.add('loaded'), 500);
+
         function openSidebar() {
             document.getElementById('sidebar').classList.remove('-translate-x-full');
             document.getElementById('sidebar-overlay').classList.remove('hidden');
