@@ -28,7 +28,9 @@ Route::middleware('auth.company')->group(function () {
 
 // ── Super Admin (Portal Control) ────────────────────────────────
 Route::middleware(['auth'])->prefix('control-tower')->name('super-admin.')->group(function () {
-    Route::get('/dashboard',       [\App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard',        [\App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/tenants/{id}',      [\App\Http\Controllers\SuperAdminController::class, 'showTenant'])->name('tenants.show');
+    Route::get('/impersonate/{id}', [\App\Http\Controllers\SuperAdminController::class, 'impersonate'])->name('impersonate');
     Route::get('/companies/create', [\App\Http\Controllers\SuperAdminController::class, 'createCompany'])->name('companies.create');
     Route::post('/companies',       [\App\Http\Controllers\SuperAdminController::class, 'storeCompany'])->name('companies.store');
 });

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class SuperAdminController extends Controller
@@ -14,6 +15,33 @@ class SuperAdminController extends Controller
     {
         $companies = Company::withCount(['users', 'parts'])->get();
         return view('super-admin.dashboard', compact('companies'));
+    }
+
+    public function showTenant($id)
+    {
+        $company = Company::withCount(['users', 'parts', 'suppliers'])->findOrFail($id);
+        
+        // Get the primary admin for this company
+        $admin = User::where('company_id', $id)->where('role', 'company_admin')->first();
+        
+        // Peek at their inventory
+        $topParts = \App\Models\Part::where('company_id', $id)->latest()->take(5)->get();
+        $recentTransactions = \App\Models\Transaction::with('part')->where('company_id', $id)->latest()->take(5)->get();
+
+        return view('super-admin.tenant-hub', compact('company', 'admin', 'topParts', 'recentTransactions'));
+    }
+
+    public function impersonate($userId)
+    {
+        $user = User::findOrFail($userId);
+        
+        // Don't allow impersonating other Super Admins for security
+        if ($user->role === 'super_admin' && auth()->id() !== $user->id) {
+            return back()->with('error', 'Cannot impersonate another Super Admin.');
+        }
+
+        Auth::login($user);
+        return redirect()->route('dashboard')->with('success', "You are now masquerading as {$user->name}");
     }
 
     public function createCompany()

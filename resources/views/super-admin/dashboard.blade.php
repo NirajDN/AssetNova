@@ -51,10 +51,10 @@
             <!-- Footer Action -->
             <div class="px-6 py-4 bg-surface-container-lowest border-t border-outline-variant/5 flex justify-between items-center">
                 <span class="text-[10px] font-bold text-on-surface-variant italic">Tenant ID: #{{ substr(md5($company->id), 0, 8) }}</span>
-                <button class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                <a href="{{ route('super-admin.tenants.show', $company->id) }}" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
                     Manage Tenant
                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </button>
+                </a>
             </div>
         </div>
         @endforeach
