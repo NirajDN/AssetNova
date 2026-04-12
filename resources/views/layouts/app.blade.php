@@ -86,22 +86,48 @@
             vertical-align: middle;
         }
         /* Prevent Flash of Unstyled Text (FOUT) */
-        html { font-size: 14px; }
+        html { 
+            font-size: 14px; 
+            scroll-behavior: smooth;
+        }
         body { 
             font-family: 'Inter', sans-serif; 
             opacity: 0; 
-            transition: opacity 0.3s ease-in; 
+            transform: scale(0.98);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
             background-color: #f9f9fe;
         }
-        body.loaded { opacity: 1; }
-        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
-        .glass-header {
-            background: rgba(249, 249, 254, 0.9);
-            backdrop-filter: blur(12px);
+        body.loaded { 
+            opacity: 1; 
+            transform: scale(1);
         }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+
+        /* Premium Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { 
+            background: rgba(0, 32, 69, 0.1); 
+            border-radius: 10px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 32, 69, 0.2); }
+
+        .glass-header {
+            background: rgba(249, 249, 254, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 32, 69, 0.05);
+        }
+        
+        /* Interactive Elements */
+        .btn-premium {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-premium:active { transform: scale(0.95); }
+
         /* Sidebar drawer transition */
         #sidebar {
-            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 12px 0 32px -4px rgba(0, 32, 69, 0.03);
         }
         #sidebar-overlay {
             transition: opacity 0.28s ease;
