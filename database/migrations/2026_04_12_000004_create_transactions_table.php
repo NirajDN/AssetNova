@@ -8,14 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('part_id')->constrained('parts')->cascadeOnDelete();
-            $table->enum('type', ['in', 'out']);
-            $table->integer('quantity');
-            $table->text('notes')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('transactions')) {
+            Schema::create('transactions', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('part_id')->constrained('parts')->cascadeOnDelete();
+                $table->enum('type', ['in', 'out']);
+                $table->integer('quantity');
+                $table->text('notes')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void

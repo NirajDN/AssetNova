@@ -8,16 +8,22 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Add company_id to users
+        // Add company_id and role to users
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete()->after('id');
-            $table->string('role')->default('company_admin')->after('company_id');
+            if (!Schema::hasColumn('users', 'company_id')) {
+                $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete()->after('id');
+            }
+            if (!Schema::hasColumn('users', 'role')) {
+                $table->string('role')->default('company_admin')->after('company_id');
+            }
         });
 
         // Add company_id to all inventory tables
         foreach (['categories', 'suppliers', 'parts', 'transactions'] as $tbl) {
-            Schema::table($tbl, function (Blueprint $table) {
-                $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete()->after('id');
+            Schema::table($tbl, function (Blueprint $table) use ($tbl) {
+                if (!Schema::hasColumn($tbl, 'company_id')) {
+                    $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete()->after('id');
+                }
             });
         }
     }
