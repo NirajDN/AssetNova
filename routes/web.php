@@ -31,6 +31,7 @@ Route::middleware(['auth'])->prefix('control-tower')->name('super-admin.')->grou
     Route::get('/dashboard',        [\App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/tenants/{id}',      [\App\Http\Controllers\SuperAdminController::class, 'showTenant'])->name('tenants.show');
     Route::get('/impersonate/{id}', [\App\Http\Controllers\SuperAdminController::class, 'impersonate'])->name('impersonate');
+    Route::get('/stop-impersonation', [\App\Http\Controllers\SuperAdminController::class, 'stopImpersonating'])->name('stop-impersonate');
     Route::get('/companies/create', [\App\Http\Controllers\SuperAdminController::class, 'createCompany'])->name('companies.create');
     Route::post('/companies',       [\App\Http\Controllers\SuperAdminController::class, 'storeCompany'])->name('companies.store');
 });

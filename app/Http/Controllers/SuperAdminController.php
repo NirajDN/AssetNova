@@ -40,8 +40,27 @@ class SuperAdminController extends Controller
             return back()->with('error', 'Cannot impersonate another Super Admin.');
         }
 
+        // Store the original Super Admin ID in the session
+        session(['impersonator_id' => auth()->id()]);
+
         Auth::login($user);
         return redirect()->route('dashboard')->with('success', "You are now masquerading as {$user->name}");
+    }
+
+    public function stopImpersonating()
+    {
+        $impersonatorId = session('impersonator_id');
+        
+        if (!$impersonatorId) {
+            return redirect()->route('dashboard');
+        }
+
+        $impersonator = User::findOrFail($impersonatorId);
+        
+        Auth::login($impersonator);
+        session()->forget('impersonator_id');
+
+        return redirect()->route('super-admin.dashboard')->with('success', 'Returned to Control Tower.');
     }
 
     public function createCompany()

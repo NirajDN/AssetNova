@@ -137,6 +137,34 @@
 <body class="bg-surface text-on-surface">
 
     <!-- ═══════════════════════════════════════════════════════
+         IMPERSONATION BANNER (Platform Master)
+    ═══════════════════════════════════════════════════════ -->
+    @if(session()->has('impersonator_id'))
+    <div class="fixed top-0 left-0 right-0 z-[60] bg-blue-700 text-white px-4 py-2 flex items-center justify-between shadow-2xl animate-pulse-subtle">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-sm">security</span>
+            <span class="text-[10px] font-black uppercase tracking-[0.2em]">Platform Master Mode: Masquerading as {{ auth()->user()->name }}</span>
+        </div>
+        <a href="{{ route('super-admin.stop-impersonate') }}" class="flex items-center gap-2 bg-white text-blue-700 px-4 py-1 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-blue-50 transition-colors">
+            <span class="material-symbols-outlined text-sm">logout</span>
+            Return to Tower
+        </a>
+    </div>
+    <style>
+        /* Pad the header or body when banner is active */
+        header { top: 36px !important; }
+        #sidebar { padding-top: 36px !important; }
+        main { padding-top: calc(5rem + 36px) !important; }
+        @keyframes pulse-subtle {
+            0% { background-color: #1d4ed8; }
+            50% { background-color: #1e40af; }
+            100% { background-color: #1d4ed8; }
+        }
+        .animate-pulse-subtle { animation: pulse-subtle 3s infinite; }
+    </style>
+    @endif
+
+    <!-- ═══════════════════════════════════════════════════════
          MOBILE OVERLAY (tap to close sidebar)
     ═══════════════════════════════════════════════════════ -->
     <div id="sidebar-overlay"
