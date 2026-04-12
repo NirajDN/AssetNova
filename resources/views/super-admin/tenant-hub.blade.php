@@ -97,8 +97,9 @@
                                         {{ $part->stock_quantity }} Units
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-right font-mono font-bold text-primary">
-                                    @indianNumber($part->cost)
+                                <td class="px-6 py-4 text-right">
+                                    <p class="font-mono font-bold text-primary">@indianNumber($part->cost * $part->stock_quantity)</p>
+                                    <p class="text-[9px] text-on-surface-variant italic">Unit: @indianNumber($part->cost)</p>
                                 </td>
                             </tr>
                             @empty
