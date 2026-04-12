@@ -169,7 +169,7 @@
                     <span class="material-symbols-outlined">analytics</span>
                     <span class="font-['Manrope'] tracking-tight text-sm">Control Tower</span>
                 </a>
-                <a class="flex items-center gap-3 {{ request()->routeIs('super-admin.companies.*') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                <a class="flex items-center gap-3 {{ request()->routeIs('super-admin.companies.create') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
                    href="{{ route('super-admin.companies.create') }}" onclick="closeSidebar()">
                     <span class="material-symbols-outlined">add_business</span>
                     <span class="font-['Manrope'] tracking-tight text-sm">Enterprise Factory</span>
@@ -241,6 +241,7 @@
             </div>
 
             <!-- Search bar — hidden on small mobile, shown md+ -->
+            @if(auth()->user()->isCompanyAdmin())
             <form method="GET" action="{{ route('parts.index') }}" class="relative hidden sm:block w-full max-w-xs md:max-w-sm">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
                 <input name="search"
@@ -249,16 +250,19 @@
                        placeholder="Search parts by name, SKU..."
                        type="text"/>
             </form>
+            @endif
         </div>
 
         <!-- Right: notifications + user -->
         <div class="flex items-center gap-3 md:gap-6 flex-shrink-0">
+            @if(auth()->user()->isCompanyAdmin())
             <a href="{{ route('transactions.index') }}"
                class="text-[#43474e] hover:text-[#002045] transition-colors relative"
                title="Recent Activity">
                 <span class="material-symbols-outlined">notifications</span>
                 <span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
             </a>
+            @endif
             <div class="hidden md:block h-8 w-[1px] bg-outline-variant/30"></div>
             <a href="{{ route('settings') }}"
                class="flex items-center gap-2 md:gap-3 group hover:opacity-80 transition-opacity"
@@ -269,7 +273,7 @@
                     <p class="text-[10px] text-on-surface-variant">{{ auth()->user()->company->name ?? 'Central Hub' }}</p>
                 </div>
                 <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden border border-outline-variant/30">
-                    @if(auth()->user()->company->logo_url)
+                    @if(auth()->user()->company && auth()->user()->company->logo_url)
                         <img src="{{ auth()->user()->company->logo_url }}" alt="Company Logo" class="w-full h-full object-contain"/>
                     @else
                         <span class="material-symbols-outlined text-xl text-primary">account_circle</span>
@@ -291,26 +295,36 @@
     ═══════════════════════════════════════════════════════ -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#ededf2] border-t border-outline-variant/20
                 flex items-center justify-around h-16 px-2 safe-area-inset-bottom shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
-        <a href="{{ route('dashboard') }}"
-           class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'text-primary' : 'text-on-surface-variant' }}">
-            <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('dashboard') ? 'font-variation-settings: FILL 1, wght 600, GRAD 0, opsz 24' : '' }}">dashboard</span>
-            <span class="text-[9px] font-bold tracking-wide">Home</span>
-        </a>
-        <a href="{{ route('parts.index') }}"
-           class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('parts.*') ? 'text-primary' : 'text-on-surface-variant' }}">
-            <span class="material-symbols-outlined text-xl">inventory_2</span>
-            <span class="text-[9px] font-bold tracking-wide">Parts</span>
-        </a>
-        <a href="{{ route('transactions.index') }}"
-           class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('transactions.*') ? 'text-primary' : 'text-on-surface-variant' }}">
-            <span class="material-symbols-outlined text-xl">swap_horiz</span>
-            <span class="text-[9px] font-bold tracking-wide">Activity</span>
-        </a>
-        <a href="{{ route('suppliers.index') }}"
-           class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('suppliers.*') ? 'text-primary' : 'text-on-surface-variant' }}">
-            <span class="material-symbols-outlined text-xl">conveyor_belt</span>
-            <span class="text-[9px] font-bold tracking-wide">Suppliers</span>
-        </a>
+        
+        @if(auth()->user()->isSuperAdmin())
+            <a href="{{ route('super-admin.dashboard') }}"
+               class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('super-admin.dashboard') ? 'text-primary' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('super-admin.dashboard') ? 'font-variation-settings: FILL 1, wght 600, GRAD 0, opsz 24' : '' }}">analytics</span>
+                <span class="text-[9px] font-bold tracking-wide">Tower</span>
+            </a>
+            <a href="{{ route('super-admin.companies.create') }}"
+               class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('super-admin.companies.create') ? 'text-primary' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">add_business</span>
+                <span class="text-[9px] font-bold tracking-wide">Onboard</span>
+            </a>
+        @else
+            <a href="{{ route('dashboard') }}"
+               class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'text-primary' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('dashboard') ? 'font-variation-settings: FILL 1, wght 600, GRAD 0, opsz 24' : '' }}">dashboard</span>
+                <span class="text-[9px] font-bold tracking-wide">Home</span>
+            </a>
+            <a href="{{ route('parts.index') }}"
+               class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('parts.*') ? 'text-primary' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">inventory_2</span>
+                <span class="text-[9px] font-bold tracking-wide">Parts</span>
+            </a>
+            <a href="{{ route('transactions.index') }}"
+               class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('transactions.*') ? 'text-primary' : 'text-on-surface-variant' }}">
+                <span class="material-symbols-outlined text-xl">swap_horiz</span>
+                <span class="text-[9px] font-bold tracking-wide">Activity</span>
+            </a>
+        @endif
+
         <button onclick="openSidebar()"
                 class="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all text-on-surface-variant">
             <span class="material-symbols-outlined text-xl">menu</span>
