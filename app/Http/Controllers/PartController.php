@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Part;
 use App\Models\Category;
 use App\Models\Supplier;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -84,7 +85,18 @@ class PartController extends Controller
         unset($validated['part_image']);
 
         $validated['company_id'] = $cid;
-        Part::create($validated);
+        $part = Part::create($validated);
+
+        // CREATE INITIAL TRANSACTION LOG
+        if ($part->stock_quantity > 0) {
+            Transaction::create([
+                'company_id' => $cid,
+                'part_id'    => $part->id,
+                'type'       => 'in',
+                'quantity'   => $part->stock_quantity,
+                'notes'      => 'Initial stock registration on part creation.',
+            ]);
+        }
 
         return redirect()->route('parts.index')->with('success', 'Part added to directory successfully.');
     }
@@ -135,7 +147,20 @@ class PartController extends Controller
             $validated['image_url'] = '/images/parts/' . $filename;
         }
         unset($validated['part_image']);
+
+        $oldQty = $part->stock_quantity;
         $part->update($validated);
+        $newQty = $part->stock_quantity;
+
+        if ($oldQty != $newQty) {
+            Transaction::create([
+                'company_id' => $cid,
+                'part_id'    => $part->id,
+                'type'       => $newQty > $oldQty ? 'in' : 'out',
+                'quantity'   => abs($newQty - $oldQty),
+                'notes'      => 'Manual quantity adjustment (Admin Edit).',
+            ]);
+        }
 
         return redirect()->route('parts.index')->with('success', 'Part updated successfully.');
     }
