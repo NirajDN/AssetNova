@@ -4,10 +4,13 @@
 
 <h1 align="center">AssetNova</h1>
 
+
 <p align="center">
   <strong>Industrial inventory, reimagined.</strong><br>
   Deliver real-time spare parts tracking, procurement intelligence, and seamless multi-company control in one unified platform.
 </p>
+<img width="1440" height="817" alt="Screenshot 2026-04-13 at 8 35 14 AM" src="https://github.com/user-attachments/assets/0364145f-fa9f-4d2d-b81a-4f6164a44229" />
+
 
 <p align="center">
   <img src="https://img.shields.io/badge/Laravel-12.x-red.svg" alt="Laravel 12.x">
