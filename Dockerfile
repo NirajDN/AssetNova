@@ -23,7 +23,6 @@ RUN npm install && npm run build
 
 RUN cp .env.example .env
 
-RUN touch database/database.sqlite
 RUN php artisan key:generate
 
 EXPOSE 10000
