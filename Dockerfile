@@ -25,9 +25,6 @@ RUN cp .env.example .env
 
 RUN php artisan key:generate
 
-RUN php artisan config:clear
-RUN php artisan cache:clear
-
 EXPOSE 10000
 
 CMD php artisan migrate --force && \
