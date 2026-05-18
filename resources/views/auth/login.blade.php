@@ -117,9 +117,15 @@
                 </button>
             </form>
 
-            <p class="text-center text-outline-variant text-xs mt-10">© 2026 AssetNova · Digital Foreman</p>
+            <p class="text-center text-on-surface-variant text-xs mt-6">
+                New to AssetNova?
+                <a href="{{ route('register') }}" class="text-primary font-semibold hover:underline">Create account</a>
+            </p>
+
+            <p class="text-center text-outline-variant text-xs mt-4">© 2026 AssetNova · Digital Foreman</p>
         </div>
     </div>
 
 </body>
 </html>
+
