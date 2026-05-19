@@ -228,6 +228,13 @@
                     <span class="material-symbols-outlined">category</span>
                     <span class="font-['Manrope'] tracking-tight text-sm">Categories</span>
                 </a>
+                <!-- AI Forecast -->
+                <a class="flex items-center gap-3 {{ request()->routeIs('ai.forecast') ? 'bg-white text-[#002045] rounded-l-xl ml-2 shadow-sm font-bold' : 'text-[#43474e] hover:text-[#002045] hover:bg-slate-200/50 transition-all rounded-l-xl ml-2' }} px-6 py-3"
+                   href="{{ route('ai.forecast') }}" onclick="closeSidebar()">
+                    <span class="material-symbols-outlined" style="background: linear-gradient(135deg,#7c3aed,#4f46e5); -webkit-background-clip:text; -webkit-text-fill-color:transparent">auto_graph</span>
+                    <span class="font-['Manrope'] tracking-tight text-sm">AI Forecast</span>
+                    <span class="ml-auto text-[9px] bg-violet-100 text-violet-600 font-black px-1.5 py-0.5 rounded-full">AI</span>
+                </a>
             @endif
         </nav>
 
@@ -363,6 +370,232 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     @stack('scripts')
+
+    @if(auth()->check() && !auth()->user()->isSuperAdmin())
+    <!-- ═══════════════════════════════════════════════════════
+         NOVA AI CHAT WIDGET
+    ═══════════════════════════════════════════════════════ -->
+    <style>
+        #nova-bubble { transition: all .3s cubic-bezier(.4,0,.2,1); }
+        #nova-panel  { transition: all .3s cubic-bezier(.4,0,.2,1); transform-origin: bottom right; }
+        #nova-panel.hidden { transform: scale(0.85); opacity:0; pointer-events:none; }
+        #nova-panel.open   { transform: scale(1);    opacity:1; pointer-events:all; }
+        .nova-msg { animation: novaSlide .25s ease; }
+        @keyframes novaSlide { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        #nova-messages::-webkit-scrollbar { width:4px; }
+        #nova-messages::-webkit-scrollbar-thumb { background:rgba(0,32,69,.15); border-radius:4px; }
+        .nova-typing span { display:inline-block; width:6px; height:6px; border-radius:50%; background:#7c3aed; margin:0 1px;
+            animation: novaBounce 1.2s infinite; }
+        .nova-typing span:nth-child(2) { animation-delay:.2s; }
+        .nova-typing span:nth-child(3) { animation-delay:.4s; }
+        @keyframes novaBounce { 0%,80%,100% { transform:translateY(0); } 40% { transform:translateY(-5px); } }
+    </style>
+
+    <!-- Bubble button -->
+    <button id="nova-bubble"
+            onclick="toggleNova()"
+            class="fixed bottom-20 right-5 lg:bottom-6 lg:right-6 z-50
+                   w-14 h-14 rounded-full shadow-2xl
+                   bg-gradient-to-br from-violet-600 to-indigo-700
+                   flex items-center justify-center
+                   hover:scale-110 active:scale-95 transition-all"
+            title="Ask Nova AI">
+        <span id="nova-icon" class="material-symbols-outlined text-white text-2xl">smart_toy</span>
+        <span id="nova-close-icon" class="material-symbols-outlined text-white text-2xl hidden">close</span>
+        <!-- Pulse ring -->
+        <span class="absolute w-full h-full rounded-full bg-violet-500 opacity-30 animate-ping"></span>
+    </button>
+
+    <!-- Chat panel -->
+    <div id="nova-panel"
+         class="hidden fixed bottom-36 right-5 lg:bottom-24 lg:right-6 z-50
+                w-[22rem] max-w-[92vw] rounded-2xl shadow-2xl overflow-hidden
+                border border-violet-200
+                flex flex-col bg-white">
+
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-[#0d1b3e] to-[#1a2e6e] px-4 py-3 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-violet-500/30 border border-violet-400/40 flex items-center justify-center">
+                <span class="material-symbols-outlined text-violet-300 text-lg">smart_toy</span>
+            </div>
+            <div class="flex-1">
+                <p class="text-white font-bold text-sm">Nova</p>
+                <p class="text-violet-300 text-xs">AI Inventory Assistant</p>
+            </div>
+            <a href="{{ route('ai.forecast') }}" title="Open Forecast Dashboard"
+               class="text-violet-300 hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-lg">auto_graph</span>
+            </a>
+        </div>
+
+        <!-- Messages -->
+        <div id="nova-messages" class="flex-1 overflow-y-auto p-4 space-y-3 min-h-[240px] max-h-[340px] bg-gray-50">
+            <!-- Welcome -->
+            <div class="nova-msg flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-violet-600 text-sm">smart_toy</span>
+                </div>
+                <div class="bg-white rounded-2xl rounded-tl-none px-3 py-2 text-sm text-gray-800 shadow-sm border border-gray-100 max-w-[85%]">
+                    Hi {{ auth()->user()->name }}! 👋 I'm <strong>Nova</strong>, your AI inventory assistant.<br/>
+                    Ask me anything — stock levels, supplier info, or what to reorder next!
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick prompts -->
+        <div id="nova-quick" class="px-3 py-2 flex gap-2 overflow-x-auto border-t border-gray-100 bg-white">
+            <button onclick="sendQuick('Which parts are running low on stock?')"
+                class="flex-shrink-0 text-xs bg-violet-50 text-violet-700 font-semibold px-3 py-1.5 rounded-full hover:bg-violet-100 transition-colors whitespace-nowrap">
+                🔴 Low stock?
+            </button>
+            <button onclick="sendQuick('Which supplier has the highest rating?')"
+                class="flex-shrink-0 text-xs bg-violet-50 text-violet-700 font-semibold px-3 py-1.5 rounded-full hover:bg-violet-100 transition-colors whitespace-nowrap">
+                ⭐ Top supplier
+            </button>
+            <button onclick="sendQuick('What are the top 3 most consumed parts this month?')"
+                class="flex-shrink-0 text-xs bg-violet-50 text-violet-700 font-semibold px-3 py-1.5 rounded-full hover:bg-violet-100 transition-colors whitespace-nowrap">
+                📊 Top consumed
+            </button>
+        </div>
+
+        <!-- Input -->
+        <div class="px-3 py-3 border-t border-gray-100 bg-white flex gap-2 items-end">
+            <textarea id="nova-input"
+                rows="1"
+                maxlength="500"
+                placeholder="Ask about your inventory…"
+                class="flex-1 resize-none bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-violet-300 focus:border-violet-300 outline-none leading-relaxed"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendNova();}"></textarea>
+            <button onclick="sendNova()"
+                id="nova-send-btn"
+                class="flex-shrink-0 w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow">
+                <span class="material-symbols-outlined text-white text-lg">send</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+    let novaOpen = false;
+
+    function toggleNova() {
+        novaOpen = !novaOpen;
+        const panel  = document.getElementById('nova-panel');
+        const icon   = document.getElementById('nova-icon');
+        const close  = document.getElementById('nova-close-icon');
+        if (novaOpen) {
+            panel.classList.remove('hidden');
+            requestAnimationFrame(() => panel.classList.add('open'));
+            panel.classList.remove('open'); // reset for animation
+            setTimeout(() => panel.classList.add('open'), 10);
+            icon.classList.add('hidden');
+            close.classList.remove('hidden');
+            document.getElementById('nova-input').focus();
+        } else {
+            panel.classList.remove('open');
+            setTimeout(() => panel.classList.add('hidden'), 300);
+            icon.classList.remove('hidden');
+            close.classList.add('hidden');
+        }
+    }
+
+    function sendQuick(text) {
+        document.getElementById('nova-input').value = text;
+        sendNova();
+    }
+
+    async function sendNova() {
+        const input = document.getElementById('nova-input');
+        const msg   = input.value.trim();
+        if (!msg) return;
+
+        appendMsg(msg, 'user');
+        input.value = '';
+        input.style.height = 'auto';
+
+        // Hide quick prompts after first message
+        document.getElementById('nova-quick').style.display = 'none';
+
+        // Show typing indicator
+        const typingId = 'typing-' + Date.now();
+        appendTyping(typingId);
+
+        try {
+            const res = await fetch('{{ route("ai.chat") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ message: msg })
+            });
+            const data = await res.json();
+            removeTyping(typingId);
+            appendMsg(data.reply || 'Sorry, something went wrong.', 'nova');
+        } catch(e) {
+            removeTyping(typingId);
+            appendMsg('Connection error. Please try again.', 'nova');
+        }
+    }
+
+    function appendMsg(text, who) {
+        const msgs = document.getElementById('nova-messages');
+        const div  = document.createElement('div');
+        div.className = 'nova-msg flex items-start gap-2' + (who === 'user' ? ' justify-end' : '');
+
+        if (who === 'user') {
+            div.innerHTML = `
+                <div class="bg-gradient-to-br from-violet-600 to-indigo-700 text-white rounded-2xl rounded-tr-none px-3 py-2 text-sm max-w-[85%] whitespace-pre-wrap">${escHtml(text)}</div>
+                <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-white text-sm">person</span>
+                </div>`;
+        } else {
+            // Format markdown-ish bullets
+            const formatted = escHtml(text)
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^- (.+)/gm, '• $1');
+            div.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-violet-600 text-sm">smart_toy</span>
+                </div>
+                <div class="bg-white rounded-2xl rounded-tl-none px-3 py-2 text-sm text-gray-800 shadow-sm border border-gray-100 max-w-[85%] whitespace-pre-wrap leading-relaxed">${formatted}</div>`;
+        }
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function appendTyping(id) {
+        const msgs = document.getElementById('nova-messages');
+        const div  = document.createElement('div');
+        div.id        = id;
+        div.className = 'nova-msg flex items-start gap-2';
+        div.innerHTML = `
+            <div class="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-violet-600 text-sm">smart_toy</span>
+            </div>
+            <div class="bg-white rounded-2xl rounded-tl-none px-3 py-2 shadow-sm border border-gray-100">
+                <div class="nova-typing"><span></span><span></span><span></span></div>
+            </div>`;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+
+    function escHtml(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // Auto-resize textarea
+    document.getElementById('nova-input')?.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+    </script>
+    @endif
 
     <script>
         // Trigger page fade-in
