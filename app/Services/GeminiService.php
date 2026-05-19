@@ -8,12 +8,21 @@ use Illuminate\Support\Facades\Log;
 class GeminiService
 {
     private string $apiKey;
-    private string $model   = 'gemini-2.0-flash';
+    private string $model   = 'gemini-2.5-flash';
     private string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models';
+
 
     public function __construct()
     {
         $this->apiKey = config('services.gemini.key', '');
+
+        // Fallback: If local server hasn't restarted to pick up the new .env, read it manually
+        if (empty($this->apiKey) && file_exists(base_path('.env'))) {
+            $env = file_get_contents(base_path('.env'));
+            if (preg_match('/^GEMINI_API_KEY=(.*)$/m', $env, $matches)) {
+                $this->apiKey = trim($matches[1]);
+            }
+        }
     }
 
     /**

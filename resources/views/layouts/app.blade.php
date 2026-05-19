@@ -376,7 +376,7 @@
          NOVA AI CHAT WIDGET
     ═══════════════════════════════════════════════════════ -->
     <style>
-        #nova-bubble { transition: all .3s cubic-bezier(.4,0,.2,1); }
+        #nova-bubble { transition: none !important; animation: none !important; transform: none !important; }
         #nova-panel  { transition: all .3s cubic-bezier(.4,0,.2,1); transform-origin: bottom right; }
         #nova-panel.hidden { transform: scale(0.85); opacity:0; pointer-events:none; }
         #nova-panel.open   { transform: scale(1);    opacity:1; pointer-events:all; }
@@ -389,21 +389,19 @@
         .nova-typing span:nth-child(2) { animation-delay:.2s; }
         .nova-typing span:nth-child(3) { animation-delay:.4s; }
         @keyframes novaBounce { 0%,80%,100% { transform:translateY(0); } 40% { transform:translateY(-5px); } }
+
     </style>
 
     <!-- Bubble button -->
     <button id="nova-bubble"
             onclick="toggleNova()"
             class="fixed bottom-20 right-5 lg:bottom-6 lg:right-6 z-50
-                   w-14 h-14 rounded-full shadow-2xl
+                   w-14 h-14 rounded-full shadow-xl overflow-hidden
                    bg-gradient-to-br from-violet-600 to-indigo-700
-                   flex items-center justify-center
-                   hover:scale-110 active:scale-95 transition-all"
+                   flex items-center justify-center cursor-pointer"
             title="Ask Nova AI">
         <span id="nova-icon" class="material-symbols-outlined text-white text-2xl">smart_toy</span>
         <span id="nova-close-icon" class="material-symbols-outlined text-white text-2xl hidden">close</span>
-        <!-- Pulse ring -->
-        <span class="absolute w-full h-full rounded-full bg-violet-500 opacity-30 animate-ping"></span>
     </button>
 
     <!-- Chat panel -->
