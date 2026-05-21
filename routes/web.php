@@ -8,7 +8,6 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\AiController;
 
 // ── Auth (public) ─────────────────────────────────────────────
 Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
@@ -27,11 +26,6 @@ Route::middleware('auth.company')->group(function () {
     Route::get('/settings',         [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings',        [SettingsController::class, 'update'])->name('settings.update');
     Route::get('/export/manifest',  [SettingsController::class, 'exportManifest'])->name('export.manifest');
-
-    // ── AI Features ──────────────────────────────────────────────
-    Route::post('/ai/chat',          [AiController::class, 'chat'])->name('ai.chat');
-    Route::get('/ai/forecast',       [AiController::class, 'forecast'])->name('ai.forecast');
-    Route::post('/ai/cache/clear',   [AiController::class, 'clearCache'])->name('ai.cache.clear');
 });
 
 // ── Super Admin (Portal Control) ────────────────────────────────
